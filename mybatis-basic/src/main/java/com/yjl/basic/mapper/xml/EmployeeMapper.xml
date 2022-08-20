@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 在Java程序中，必须找到当前的Mapper配置文件，才能进一步找到这里配置的SQL语句 -->
+<!-- Java程序就是通过mapper标签的namespace属性找到当前Mapper配置文件 -->
+<!-- 将来为了让一个Java接口，直接对应这个Mapp|er配置文件，通常使用Java接口的全类名作为这个namespace属性的值 -->
+<!-- 以前我们叫dao，现在叫mapper，本质上都是持久化层的类型，只是命名习惯的区别 -->
+<mapper namespace="com.yjl.basic.mapper.EmployeeMapper">
+    <!-- select语句使用select标签 -->
+    <!-- insert语句使用insert标签 -->
+    <!-- update语句使用update标签 -->
+    <!-- delect语句使用delect标签 -->
+
+    <!-- 在select标签中编写一条select语句实现查询效果 -->
+    <!-- id属性：这条SQL语句的唯一标识 -->
+    <!-- resultType属性：Mybatis负责解析结果集，将解析得到的数据封装到Java类型中。resultType属性就是指定这个Java类型 -->
+    <select id="selectEmpById" resultType="com.yjl.basic.entity.Emp">
+        <!-- #{emp_id}这里是为了方便接收Java程序传过来的参数数据 -->
+        <!-- Mybatis负责将#{emp_id}部分转换为"?"占位符 -->
+        select emp_id, emp_name, emp_salary
+        from tb_emp
+        where emp_id = #{empId}
+    </select>
+
+    <!-- int insertEmp(Emp emp); -->
+    <insert id="insertEmp">
+        <!-- 现在在这条SQL语句中，#{}中的表达式需要被用来从Emp emp实体类中获取emp_name的值、emp_salary的值 -->
+        <!-- 而我们从实体类中获取值通常都是调用getXxx()方法 -->
+        <!-- 而getXxx()方法、setXxx()方法定义了实体类的属性 -->
+        <!-- 定义属性的规则是：把get、set去掉，剩下部分首字母小写 -->
+        <!-- 所以我们在#{}中使用getXxx()方法、setXxx()方法定义的属性名即可 -->
+        insert into tb_emp(emp_name, emp_salary)
+        values (#{empName}, #{empSalary})
+    </insert>
+
+    <!-- int deleteById(long emp_id); -->
+    <delete id="deleteById">
+        delete
+        from tb_emp
+        where emp_id = #{empId}
+    </delete>
+
+    <!-- void updateEmp(Emp harry); -->
+    <update id="updateEmp">
+        update tb_emp
+        set emp_name=#{empName},
+            emp_salary=#{empSalary}
+        where emp_id = #{empId}
+    </update>
+
+    <!-- Emp selectEmpByName(String o); -->
+    <select id="selectEmpByName">
+        select emp_id emp_id, emp_name emp_name, emp_salary emp_salary
+        from tb_emp
+        where emp_name like "%${empName}%"
+    </select>
+
+    <!-- 如果我们有在接口声明抽象方法时使用@Param注解给参数命名，那么就可以在#{}中使用我们指定的名称 -->
+    <!-- void updateSalaryById(@Param("emp_id") Long emp_id, @Param("emp_salary") Double salary); -->
+    <!-- 如果我们没有在接口声明抽象方法时给参数命名，那么Mybatis会要求使用默认参数名 -->
+    <!-- BindingException: Parameter 'salary' not found. Available parameters are [arg1, arg0, param1, param2] -->
+    <!-- void updateSalaryById(Long emp_id, Double salary); -->
+    <update id="updateSalaryById">
+        update tb_emp
+        set emp_salary=#{empSalary}
+        where emp_id = #{empId}
+    </update>
+
+    <!-- 当接口抽象方法形参传入的是Map类型时，#{}中写Map的key来获取对应的value -->
+    <!-- void updateByMap(Map<String, Object> paramMap); -->
+    <update id="updateByMap">
+        update tb_emp
+        set emp_name=#{empNameKey},
+            emp_salary=#{empSalaryKey}
+        where emp_id = #{empIdKey}
+    </update>
+
+    <!-- Integer selectCount(); -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*)
+        from tb_emp
+    </select>
+
+    <!-- 拿到查询结果后，Mybatis会使用字段名作为key，字段值作为value存入Map -->
+    <!-- 如果查询语句中字段有别名，那么Map的key就是别名 -->
+    <!-- Map<String, Object> selectForMap(int emp_id); -->
+    <select id="selectForMap" resultType="map">
+        select emp_id emp_idKey, emp_name emp_nameKey, emp_salary emp_salaryKey
+        from tb_emp
+        where emp_id = #{empId}
+    </select>
+
+    <!-- 在resultType属性中指定集合中的实体类类型即可，不需要考虑外面的集合类型 -->
+    <!-- List<Emp> selectAll(); -->
+    <select id="selectAll">
+        select emp_id, emp_name, emp_salary
+        from tb_emp
+    </select>
+
+    <!-- int insertWithKey(Emp emp); -->
+    <!-- useGeneratedKeys属性：设置为true表示需要获取自增的主键 -->
+    <!-- keyProperty属性：表示获取到自增主键的值存入实体类对象的属性中 -->
+    <insert id="insertWithKey" useGeneratedKeys="true" keyProperty="empId">
+        insert into tb_emp(emp_name, emp_salary)
+        values (#{empName}, #{empSalary})
+    </insert>
+
+    <!-- 使用resultMap标签明确声明数据库表字段名和属性名的对应关系 -->
+    <!-- id属性：resultMap标签的唯一标识 -->
+    <!-- type属性：指定Java实体类类型的全类名，用于封装最后的实体类数据 -->
+    <resultMap id="selectWithResultMapResultMap">
+        <!-- 使用id标签声明主键字段和属性的对应关系 -->
+        <id column="emp_id" property="empId"/>
+        <!-- 使用result标签声明对应关系 -->
+        <!--<result column="emp_id" property="empId"/>-->
+        <result column="emp_name" property="empName"/>
+        <result column="emp_salary" property="empSalary"/>
+    </resultMap>
+
+    <!-- List<Emp> selectWithResultMap(); -->
+    <!-- 在select标签的resultMap属性中引用配套的resultMap -->
+    <select id="selectWithResultMap" resultMap="selectWithResultMapResultMap">
+        select emp_id, emp_name, emp_salary
+        from tb_emp
+    </select>
+</mapper>

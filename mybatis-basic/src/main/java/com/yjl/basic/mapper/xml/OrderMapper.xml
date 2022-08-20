@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mvc.controller.DemoController.yjl.mybatis.mapper.OrderMapper">
+
+    <resultMap id="selectOrderWithCustomerResultMap" type="com.spring.mvc.controller.DemoController.yjl.TbOrder">
+        <!-- 映射TOrder本身的属性 -->
+        <id column="order_id" property="orderId"/>
+        <result column="order_name" property="orderName"/>
+
+        <!-- association标签：映射对一关联关系：给Customer属性填充数据 -->
+        <!-- property属性：给TOrder对象中的哪一个属性设置数据 -->
+        <!-- javaType属性：customer属性的全类名 -->
+        <association property="customer" javaType="com.spring.mvc.controller.DemoController.yjl.TbCustomer">
+
+            <!-- 针对customer属性设置数据：建立字段和属性的对应关系 -->
+            <result column="customer_id" property="customerId"/>
+            <result column="customer_name" property="customerName"/>
+        </association>
+    </resultMap>
+
+    <!-- TOrder selectOrderWithCustomer(Integer orderId); -->
+    <select id="selectOrderWithCustomer" resultMap="selectOrderWithCustomerResultMap">
+        select
+        order_id orderId,
+        order_name orderName,
+        c.customer_id customerId,
+        customer_name customerName
+        from tb_order o
+        left join tb_customer c on o.customer_id=c.customer_id
+        where order_id=#{orderId}
+    </select>
+
+</mapper>
