@@ -19,15 +19,14 @@ public interface EmployeeMapper {
     /**
      * 通过这个方法对应Mapper配置文件中的SQL语句
      *
-     * @param emp_id 当前方法的参数对应SQL语句中#{emp_id}声明的参数
+     * @param empId 当前方法的参数对应SQL语句中#{emp_id}声明的参数
      * @return 当前方法的返回值类型和resultType属性指定的类型一致
      */
-    Emp selectEmpById(Long emp_id);
+    Emp selectEmpById(Long empId);
 
     /**
      * 执行插入操作
      *
-     * @param emp
      * @return 受影响的行数
      */
     int insertEmp(Emp emp);
@@ -35,10 +34,10 @@ public interface EmployeeMapper {
     /**
      * 执行删除操作
      *
-     * @param emp_id
+     * @param empId
      * @return 受影响的行数
      */
-    int deleteById(long emp_id);
+    int deleteById(long empId);
 
     /**
      * 执行更新操作
@@ -50,18 +49,18 @@ public interface EmployeeMapper {
     /**
      * 模糊查询，根据员工姓名片段查询对应数据
      *
-     * @param emp_name
+     * @param empName
      * @return
      */
-    Emp selectEmpByName(String emp_name);
+    Emp selectEmpByName(String empName);
 
     /**
      * 使用@Param注解给方法形参命名，具体用法参照Mapper配置文件
      *
-     * @param emp_id
+     * @param empId
      * @param salary
      */
-    void updateSalaryById(@Param("empId") Long emp_id, @Param("empSalary") Double salary);
+    void updateSalaryById(@Param("empId") Long empId, @Param("empSalary") Double salary);
 
     /**
      * @param paramMap
@@ -75,10 +74,10 @@ public interface EmployeeMapper {
     Integer selectCount();
 
     /**
-     * @param emp_id
+     * @param empId
      * @return
      */
-    Map<String, Object> selectForMap(int emp_id);
+    Map<String, Object> selectForMap(int empId);
 
     /**
      * @return

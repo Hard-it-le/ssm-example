@@ -9,7 +9,6 @@ import com.yjl.basic.entity.Order;
 public interface OrderMapper {
 
     /**
-     * s
      * @param orderId
      * @return
      */
