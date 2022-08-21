@@ -22,7 +22,6 @@
         where emp_id = #{empId}
     </select>
 
-    <!-- int insertEmp(Emp emp); -->
     <insert id="insertEmp">
         <!-- 现在在这条SQL语句中，#{}中的表达式需要被用来从Emp emp实体类中获取emp_name的值、emp_salary的值 -->
         <!-- 而我们从实体类中获取值通常都是调用getXxx()方法 -->
@@ -33,14 +32,12 @@
         values (#{empName}, #{empSalary})
     </insert>
 
-    <!-- int deleteById(long emp_id); -->
     <delete id="deleteById">
         delete
         from m_emp
         where emp_id = #{empId}
     </delete>
 
-    <!-- void updateEmp(Emp harry); -->
     <update id="updateEmp">
         update m_emp
         set emp_name=#{empName},
@@ -112,12 +109,10 @@
         <!-- 使用id标签声明主键字段和属性的对应关系 -->
         <id column="emp_id" property="empId"/>
         <!-- 使用result标签声明对应关系 -->
-        <!--<result column="emp_id" property="empId"/>-->
         <result column="emp_name" property="empName"/>
         <result column="emp_salary" property="empSalary"/>
     </resultMap>
 
-    <!-- List<Emp> selectWithResultMap(); -->
     <!-- 在select标签的resultMap属性中引用配套的resultMap -->
     <select id="selectWithResultMap" resultMap="selectWithResultMapResultMap">
         select emp_id, emp_name, emp_salary

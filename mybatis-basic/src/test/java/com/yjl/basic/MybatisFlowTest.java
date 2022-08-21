@@ -43,7 +43,8 @@ class MybatisFlowTest {
         // 执行SQL语句
         Object result = session.selectOne(statement, emp_id);
 
-        System.out.println("o = " + result);
+        log.info("result {}: ", result);
+
 
         // 4.关闭SqlSession
         session.close();
@@ -70,7 +71,8 @@ class MybatisFlowTest {
         Long emp_id = 1L;
         Object selectOne = sqlSession.selectOne(statement, emp_id);
         //6.打印查询结果
-        System.out.println("0=:" + selectOne);
+        log.info("result {}: ", selectOne);
+
         //7.提交事务
         sqlSession.commit();
         //8。关闭会话
